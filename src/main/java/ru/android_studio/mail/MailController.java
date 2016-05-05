@@ -8,6 +8,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.mail.MessagingException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.Locale;
 
 @Controller
@@ -18,7 +21,11 @@ public class MailController {
     private MailService mailService;
 
     @RequestMapping(method = RequestMethod.POST, value = "/callback")
-    public void sendCallbackMail(@RequestParam(value = "name") String name, @RequestParam(value = "phoneNumber") String phoneNumber, Locale locale) throws MessagingException {
+    public void sendCallbackMail(HttpServletResponse httpServletResponse,
+                                 @RequestParam(value = "name") String name,
+                                 @RequestParam(value = "phoneNumber") String phoneNumber,
+                                 Locale locale) throws MessagingException, IOException {
         mailService.sendCallbackMail(name, phoneNumber, locale);
+        httpServletResponse.sendRedirect("http://android-studio.ru/thanks.html");
     }
 }
